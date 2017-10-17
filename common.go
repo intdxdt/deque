@@ -1,5 +1,12 @@
 package deque
 
+func maxInt(x, y int) int {
+    if y > x {
+        return y
+    }
+    return x
+}
+
 func initQue(initSize int) ([]interface{}, []interface{}, int, int) {
 	i := initSize / 2
 	j := i
@@ -7,8 +14,6 @@ func initQue(initSize int) ([]interface{}, []interface{}, int, int) {
 	view := base[i:j]
 	return base, view, i, j
 }
-
-
 
 func (q *Deque) expandBase() {
 	bn := len(q.base)

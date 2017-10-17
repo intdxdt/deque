@@ -3,7 +3,6 @@ package deque
 import (
 	"fmt"
 	"bytes"
-	"github.com/intdxdt/math"
 )
 
 type Deque struct {
@@ -20,7 +19,7 @@ const N = 32
 func NewDeque(initSize ...int) *Deque {
 	var iSize int = N
 	if len(initSize) > 0 {
-		iSize = math.MaxInt(1, initSize[0])
+		iSize = maxInt(1, initSize[0])
 	}
 	base, view, i, j := initQue(iSize)
 	return &Deque{
@@ -77,7 +76,7 @@ func (q *Deque) Reverse() *Deque {
 	return q
 }
 
-//Append to rightside of Deque
+//Append to right side of Deque
 func (q *Deque) Append(o interface{}) *Deque {
 	q.Reserve(false, true)
 	q.base[q.j] = o
