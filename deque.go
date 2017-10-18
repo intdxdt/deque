@@ -3,8 +3,8 @@ package deque
 import (
 	"fmt"
 	"bytes"
-	"github.com/intdxdt/math"
 )
+const N = 32
 
 type Deque struct {
 	base     []interface{}
@@ -14,13 +14,12 @@ type Deque struct {
 	initSize int
 }
 
-const N = 32
 
 //Construct a new Deque
 func NewDeque(initSize ...int) *Deque {
 	var iSize int = N
 	if len(initSize) > 0 {
-		iSize = math.MaxInt(1, initSize[0])
+		iSize = maxInt(1, initSize[0])
 	}
 	base, view, i, j := initQue(iSize)
 	return &Deque{

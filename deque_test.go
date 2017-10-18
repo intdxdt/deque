@@ -19,7 +19,7 @@ func TestDeque(t *testing.T) {
 		var lArray []int
 		g.BeforeEach(func() {
 			array = []int{9, 5, 3, 2, 8, 1, 2, 3}
-			dq = NewDeque()
+			dq = NewDeque(64)
 			for _, v := range array {
 				dq.Append(v)
 			}
