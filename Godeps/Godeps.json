@@ -1,0 +1,12 @@
+{
+	"ImportPath": "github.com/intdxdt/deque",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/franela/goblin",
+			"Comment": "0.0.1-74-gb962efd",
+			"Rev": "b962efd4bb2a58a949a16d3fdcd6ffa068d21b03"
+		}
+	]
+}

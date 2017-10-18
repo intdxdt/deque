@@ -15,8 +15,6 @@ func initQue(initSize int) ([]interface{}, []interface{}, int, int) {
 	return base, view, i, j
 }
 
-
-
 func (q *Deque) expandBase() {
 	bn := len(q.base)
 	vn := len(q.view)

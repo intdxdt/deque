@@ -76,7 +76,7 @@ func (q *Deque) Reverse() *Deque {
 	return q
 }
 
-//Append to rightside of Deque
+//Append to right side of Deque
 func (q *Deque) Append(o interface{}) *Deque {
 	q.Reserve(false, true)
 	q.base[q.j] = o
