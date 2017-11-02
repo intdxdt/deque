@@ -17,7 +17,7 @@ type Deque struct {
 
 //Construct a new Deque
 func NewDeque(initSize ...int) *Deque {
-	var iSize int = N
+	var iSize  = N
 	if len(initSize) > 0 {
 		iSize = maxInt(1, initSize[0])
 	}
