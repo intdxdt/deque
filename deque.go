@@ -1,9 +1,10 @@
 package deque
 
 import (
-	"fmt"
 	"bytes"
+	"fmt"
 )
+
 const N = 32
 
 type Deque struct {
@@ -14,10 +15,9 @@ type Deque struct {
 	initSize int
 }
 
-
 //Construct a new Deque
 func NewDeque(initSize ...int) *Deque {
-	var iSize  = N
+	var iSize = N
 	if len(initSize) > 0 {
 		iSize = maxInt(1, initSize[0])
 	}
@@ -81,7 +81,7 @@ func (q *Deque) Append(o interface{}) *Deque {
 	q.Reserve(false, true)
 	q.base[q.j] = o
 	q.j += 1
-	q.view = q.base[q.i: q.j]
+	q.view = q.base[q.i:q.j]
 	return q
 }
 
@@ -121,7 +121,7 @@ func (q *Deque) AppendLeft(o interface{}) *Deque {
 	}
 	q.base[q.i] = o
 
-	q.view = q.base[q.i: q.j]
+	q.view = q.base[q.i:q.j]
 	return q
 }
 

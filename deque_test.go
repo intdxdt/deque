@@ -2,10 +2,10 @@ package deque
 
 import (
 	"fmt"
-	"time"
-	"testing"
-	"math/rand"
 	"github.com/franela/goblin"
+	"math/rand"
+	"testing"
+	"time"
 )
 
 func TestDeque(t *testing.T) {
