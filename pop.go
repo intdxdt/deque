@@ -1,24 +1,26 @@
 package deque
 
-func (q *Deque) Pop() interface{} {
+func (q *Deque[T]) Pop() T {
+	var empty T
 	if q.Len() == 0 {
 		panic("pop from an empty deque")
 	}
 	n := len(q.view) - 1
 	val := q.view[n]
 
-	q.view[n] = nil
+	q.view[n] = empty
 	q.view = q.view[:n]
 	q.j -= 1
 	return val
 }
 
-func (q *Deque) PopLeft() interface{} {
+func (q *Deque[T]) PopLeft() interface{} {
+	var empty T
 	if q.Len() == 0 {
 		panic("pop from an empty deque")
 	}
 	val := q.view[0]
-	q.view[0] = nil
+	q.view[0] = empty
 
 	q.view = q.view[1:]
 	q.i += 1

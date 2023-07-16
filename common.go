@@ -1,21 +1,23 @@
 package deque
 
-func maxInt(x, y int) int {
-    if y > x {
-        return y
-    }
-    return x
+import "golang.org/x/exp/constraints"
+
+func max[T constraints.Ordered](x, y T) T {
+	if y > x {
+		return y
+	}
+	return x
 }
 
-func initQue(initSize int) ([]interface{}, []interface{}, int, int) {
+func initQue[T any](initSize int) ([]T, []T, int, int) {
 	i := initSize / 2
 	j := i
-	base := make([]interface{}, initSize, initSize)
+	base := make([]T, initSize, initSize)
 	view := base[i:j]
 	return base, view, i, j
 }
 
-func (q *Deque) expandBase() {
+func (q *Deque[T]) expandBase() {
 	bn := len(q.base)
 	vn := len(q.view)
 
@@ -30,16 +32,16 @@ func (q *Deque) expandBase() {
 	ii := k - mid
 	jj := ii + vn
 
-	newBase := make([]interface{}, nn)
+	newBase := make([]T, nn)
 	copy(newBase[k:], q.view[mid:])
 	copy(newBase[k-mid:k], q.view[0:mid])
 	q.base = newBase
 
 	q.i, q.j = ii, jj
-	q.view = q.base[q.i: q.j]
+	q.view = q.base[q.i:q.j]
 }
 
-func (q *Deque) atPivot() bool {
+func (q *Deque[T]) atPivot() bool {
 	n := len(q.base)
 	return q.i == q.j && (q.i >= 0 && q.i < n)
 }

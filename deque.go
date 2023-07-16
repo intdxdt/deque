@@ -7,22 +7,21 @@ import (
 
 const N = 32
 
-type Deque struct {
-	base     []interface{}
-	view     []interface{}
+type Deque[T any] struct {
+	base     []T
+	view     []T
 	i        int
 	j        int
 	initSize int
 }
 
-//Construct a new Deque
-func NewDeque(initSize ...int) *Deque {
+func NewDeque[T any](initSize ...int) *Deque[T] {
 	var iSize = N
 	if len(initSize) > 0 {
-		iSize = maxInt(1, initSize[0])
+		iSize = max(1, initSize[0])
 	}
-	base, view, i, j := initQue(iSize)
-	return &Deque{
+	var base, view, i, j = initQue[T](iSize)
+	return &Deque[T]{
 		base:     base,
 		view:     view,
 		i:        i,
@@ -31,12 +30,12 @@ func NewDeque(initSize ...int) *Deque {
 	}
 }
 
-//Clone Deque
-func (q *Deque) Clone() *Deque {
-	base := make([]interface{}, len(q.base))
+// Clone Deque
+func (q *Deque[T]) Clone() *Deque[T] {
+	var base = make([]T, len(q.base))
 	copy(base, q.base)
 	view := base[q.i:q.j]
-	return &Deque{
+	return &Deque[T]{
 		base: base,
 		view: view,
 		i:    q.i,
@@ -44,9 +43,9 @@ func (q *Deque) Clone() *Deque {
 	}
 }
 
-//reserve enough space left or right
+// Reserve enough space left or right
 // sufficient to contain elements on insert
-func (q *Deque) Reserve(left, right bool) {
+func (q *Deque[T]) Reserve(left, right bool) {
 	if left && q.i == 0 {
 		q.expandBase()
 	}
@@ -56,28 +55,28 @@ func (q *Deque) Reserve(left, right bool) {
 	}
 }
 
-func (q *Deque) DataRange() (*int, *int) {
+func (q *Deque[T]) DataRange() (*int, *int) {
 	return &q.i, &q.j
 }
 
-func (q *Deque) RawSlice() []interface{} {
+func (q *Deque[T]) RawSlice() []T {
 	return q.base
 }
 
-func (q *Deque) DataView() *[]interface{} {
+func (q *Deque[T]) DataView() *[]T {
 	return &q.view
 }
 
-//Reverse Deque in-pace
-func (q *Deque) Reverse() *Deque {
+// Reverse Deque in-pace
+func (q *Deque[T]) Reverse() *Deque[T] {
 	for i, j := 0, len(q.view)-1; i < j; i, j = i+1, j-1 {
 		q.view[i], q.view[j] = q.view[j], q.view[i]
 	}
 	return q
 }
 
-//Append to right side of Deque
-func (q *Deque) Append(o interface{}) *Deque {
+// Append to right side of Deque
+func (q *Deque[T]) Append(o T) *Deque[T] {
 	q.Reserve(false, true)
 	q.base[q.j] = o
 	q.j += 1
@@ -85,24 +84,24 @@ func (q *Deque) Append(o interface{}) *Deque {
 	return q
 }
 
-//Extend Deque given list of values as params
-func (q *Deque) Extend(values ...interface{}) *Deque {
+// Extend Deque given list of values as params
+func (q *Deque[T]) Extend(values ...T) *Deque[T] {
 	for _, v := range values {
 		q.Append(v)
 	}
 	return q
 }
 
-//Extend with deque another deque from the right
-func (q *Deque) ExtendWithDeque(dq *Deque) *Deque {
+// ExtendWithDeque - extends deque with another deque from the right
+func (q *Deque[T]) ExtendWithDeque(dq *Deque[T]) *Deque[T] {
 	for _, v := range dq.view {
 		q.Append(v)
 	}
 	return q
 }
 
-//Concat two Deque and returns a new Deque
-func (q *Deque) Concat(dq *Deque) *Deque {
+// Concat two Deque and returns a new Deque
+func (q *Deque[T]) Concat(dq *Deque[T]) *Deque[T] {
 	concat := q.Clone()
 	for _, v := range dq.view {
 		concat.Append(v)
@@ -110,8 +109,8 @@ func (q *Deque) Concat(dq *Deque) *Deque {
 	return concat
 }
 
-//AppendLeft: appends to left of Deque
-func (q *Deque) AppendLeft(o interface{}) *Deque {
+// AppendLeft - appends to left of Deque
+func (q *Deque[T]) AppendLeft(o T) *Deque[T] {
 	q.Reserve(true, false)
 
 	if q.atPivot() {
@@ -125,57 +124,57 @@ func (q *Deque) AppendLeft(o interface{}) *Deque {
 	return q
 }
 
-//Extend leftside of deque with given values as params oder
-func (q *Deque) ExtendLeft(values ...interface{}) *Deque {
+// ExtendLeft - extend leftside of deque with given values as params oder
+func (q *Deque[T]) ExtendLeft(values ...T) *Deque[T] {
 	for i := len(values) - 1; i >= 0; i-- {
 		q.AppendLeft(values[i])
 	}
 	return q
 }
 
-//Extend left width deque
-func (q *Deque) ExtendLeftWithDeque(dq *Deque) *Deque {
+// ExtendLeftWithDeque - extend left width deque
+func (q *Deque[T]) ExtendLeftWithDeque(dq *Deque[T]) *Deque[T] {
 	for i := len(dq.view) - 1; i >= 0; i-- {
 		q.AppendLeft(dq.view[i])
 	}
 	return q
 }
 
-//First value in Deque
-func (q *Deque) Get(idx int) interface{} {
+// Get first value in Deque
+func (q *Deque[T]) Get(idx int) interface{} {
 	if idx < 0 {
 		idx += len(q.view)
 	}
 	return q.view[idx]
 }
 
-//First value in Deque
-func (q *Deque) First() interface{} {
+// First value in Deque
+func (q *Deque[T]) First() interface{} {
 	return q.Get(0)
 }
 
-//Last value in Deque
-func (q *Deque) Last() interface{} {
+// Last value in Deque
+func (q *Deque[T]) Last() interface{} {
 	return q.Get(-1)
 }
 
-//Length of number of items in Deque
-func (q *Deque) Len() int {
+// Len - length of number of items in Deque
+func (q *Deque[T]) Len() int {
 	return len(q.view)
 }
 
-//Checks if Deque empty
-func (q *Deque) IsEmpty() bool {
+// IsEmpty - checks if Deque empty
+func (q *Deque[T]) IsEmpty() bool {
 	return q.Len() == 0
 }
 
-//Clear everything in Deque
-func (q *Deque) Clear() *Deque {
-	q.base, q.view, q.i, q.j = initQue(q.initSize)
+// Clear everything in Deque
+func (q *Deque[T]) Clear() *Deque[T] {
+	q.base, q.view, q.i, q.j = initQue[T](q.initSize)
 	return q
 }
 
-func (q *Deque) String() string {
+func (q *Deque[T]) String() string {
 	var buffer bytes.Buffer
 	n := q.Len()
 	buffer.WriteString("[")
@@ -190,10 +189,10 @@ func (q *Deque) String() string {
 	return buffer.String()
 }
 
-//Loop through items in the queue with a callback
+// ForEach : Loop through items in the queue with a callback
 // if callback returns bool. Break looping with callback
 // return as false
-func (q *Deque) ForEach(fn func(interface{}, int) bool) {
+func (q *Deque[T]) ForEach(fn func(T, int) bool) {
 	for i, v := range q.view {
 		if !fn(v, i) {
 			break
