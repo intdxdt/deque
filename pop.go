@@ -14,10 +14,10 @@ func (q *Deque[T]) Pop() T {
 	return val
 }
 
-func (q *Deque[T]) PopLeft() interface{} {
+func (q *Deque[T]) PopLeft() T {
 	var empty T
 	if q.Len() == 0 {
-		panic("pop from an empty deque")
+		panic("pop from an empty que")
 	}
 	val := q.view[0]
 	q.view[0] = empty

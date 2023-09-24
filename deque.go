@@ -141,7 +141,7 @@ func (q *Deque[T]) ExtendLeftWithDeque(dq *Deque[T]) *Deque[T] {
 }
 
 // Get first value in Deque
-func (q *Deque[T]) Get(idx int) interface{} {
+func (q *Deque[T]) Get(idx int) T {
 	if idx < 0 {
 		idx += len(q.view)
 	}
@@ -149,12 +149,12 @@ func (q *Deque[T]) Get(idx int) interface{} {
 }
 
 // First value in Deque
-func (q *Deque[T]) First() interface{} {
+func (q *Deque[T]) First() T {
 	return q.Get(0)
 }
 
 // Last value in Deque
-func (q *Deque[T]) Last() interface{} {
+func (q *Deque[T]) Last() T {
 	return q.Get(-1)
 }
 
